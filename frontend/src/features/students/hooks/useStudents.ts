@@ -1,32 +1,19 @@
-import { useEffect, useState } from "react";
-import { getStudents } from "../services/studentService";
-import type { Student } from "../types";
+import { useEffect } from "react";
+
+import {
+    useAppDispatch,
+    useAppSelector
+} from "../../../app/hooks";
+
+import { fetchStudents } from "../studentsThunks";
 
 export const useStudents = () => {
-    const [students, setStudents] = useState<Student[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const dispatch = useAppDispatch();
+    const { students, loading, error } = useAppSelector(state => state.students)
 
     useEffect(() => {
-        let isMounted = true;
-        
-       const fetchStudents = async () => {
-            try {
-                const data = await getStudents();
-                if (isMounted) setStudents(data);
-            } catch (err) {
-                 if (isMounted) setError("Failed to fetch students");
-            } finally {
-                if (isMounted) setLoading(false);
-            }
-        }
+        dispatch(fetchStudents());
+    }, [dispatch]);
 
-        fetchStudents();
-        
-        return () => {
-            isMounted = false;
-        };
-    }, []);
-
-    return { students, setStudents, loading, error };
+    return { students, loading, error };
 }

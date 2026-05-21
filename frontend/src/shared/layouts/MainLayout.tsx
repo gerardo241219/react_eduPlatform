@@ -1,28 +1,42 @@
 import { Outlet } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 export default function MainLayout() {
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        window.location.href = "/login";
-    }
-
     return (
-        <div>
-            <header style={{
-                padding: "1rem",
-                borderBottom: "1px solid gray"
-            }}>
-                <h2>EduSync Platform</h2>
-                <button
-                    onClick={handleLogout}
-                >Logout</button>
-            </header>
+        <div
+            className="
+        min-h-screen
+        flex
+        bg-gray-100
+      "
+        >
+            <Sidebar />
 
-            <main style={{
-                padding: "1rem"
-            }}>
-                <Outlet />
-            </main>
+            <div className="flex-1">
+                <header
+                    className="
+            h-16
+            bg-white
+            border-b
+            px-6
+            flex
+            items-center
+          "
+                >
+                    <h2
+                        className="
+              text-xl
+              font-semibold
+            "
+                    >
+                        Dashboard
+                    </h2>
+                </header>
+
+                <main className="p-6">
+                    <Outlet />
+                </main>
+            </div>
         </div>
     );
 }
