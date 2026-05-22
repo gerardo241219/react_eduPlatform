@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getStudents, createStudent } from "./services/studentService";
 import type { Student } from "./types";
 
-export const fetchStudents = createAsyncThunk("students/fetchStudents",
+export const fetchStudentsThunk = createAsyncThunk("students/fetchStudents",
     async () => {
         const data = await getStudents();
         return data;

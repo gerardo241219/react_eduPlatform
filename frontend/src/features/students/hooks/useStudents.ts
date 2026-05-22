@@ -5,14 +5,14 @@ import {
     useAppSelector
 } from "../../../app/hooks";
 
-import { fetchStudents } from "../studentsThunks";
+import { fetchStudentsThunk } from "../studentsThunks";
 
 export const useStudents = () => {
     const dispatch = useAppDispatch();
     const { students, loading, error } = useAppSelector(state => state.students)
 
     useEffect(() => {
-        dispatch(fetchStudents());
+        dispatch(fetchStudentsThunk());
     }, [dispatch]);
 
     return { students, loading, error };

@@ -9,10 +9,6 @@ import api from "../../../shared/services/api";
 export const getStudents = async (): Promise<Student[]> => {
   await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network delay
 
-  // if (Math.random() < 0.3) {
-  //   throw new Error("Random API error");
-  // }
-
   const storedStudentData = localStorage.getItem("students");
 
   if (storedStudentData) {
@@ -60,3 +56,29 @@ export const deleteStudent = async (id: number): Promise<void> => {
 
   localStorage.setItem("students", JSON.stringify(updatedStudents));
 };
+
+export const updateStudent = async (id: number, updateData: Partial<Student>) => {
+  await new Promise(r => setTimeout(r, 500));
+
+  const storedData = localStorage.getItem("students");
+  const students: Student[] = storedData ? JSON.parse(storedData) : [];
+
+  const updatedStudents = students.map(student =>
+    student.id === id ? {
+      ...student,
+      updateData
+    } : student
+  );
+
+  localStorage.setItem("students", JSON.stringify(updatedStudents))
+
+  const updatedStudent = updatedStudents.find(s => s.id === id);
+
+  if (!updateStudent) {
+    throw new Error(
+      "Student not found"
+    )
+  }
+
+  return updatedStudent;
+}

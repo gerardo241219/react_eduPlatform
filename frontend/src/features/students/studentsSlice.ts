@@ -1,7 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import type { Student } from "./types";
-import { createStudentThunk, fetchStudents } from "./studentsThunks";
+import { createSlice }
+    from "@reduxjs/toolkit";
+
+import type {
+    PayloadAction
+} from "@reduxjs/toolkit";
+
+import type {
+    Student
+} from "./types";
+
+import * as studentsThunks
+    from "./studentsThunks";
 
 interface StudentsState {
     students: Student[];
@@ -40,12 +49,22 @@ const studentsSlice = createSlice({
             action: PayloadAction<number>
         ) => {
             state.students = state.students.filter(student => student.id !== action.payload);
+        },
+
+        updateStudent: (
+            state,
+            action: PayloadAction<Student>
+        ) => {
+            state.students =
+                state.students.map(student =>
+                    student.id === action.payload.id ? action.payload : student
+                )
         }
     },
     extraReducers: builder => {
         builder
             .addCase(
-                fetchStudents.pending,
+                studentsThunks.fetchStudentsThunk.pending,
                 state => {
                     state.loading = true,
                         state.error = null
@@ -53,7 +72,7 @@ const studentsSlice = createSlice({
             )
 
             .addCase(
-                fetchStudents.fulfilled,
+                studentsThunks.fetchStudentsThunk.fulfilled,
                 (state, action) => {
                     state.loading = false;
                     state.students = action.payload
@@ -61,7 +80,7 @@ const studentsSlice = createSlice({
             )
 
             .addCase(
-                fetchStudents.rejected,
+                studentsThunks.fetchStudentsThunk.rejected,
                 state => {
                     state.loading = false;
                     state.error = "Failed to fetch students";
@@ -69,7 +88,7 @@ const studentsSlice = createSlice({
             )
 
             .addCase(
-                createStudentThunk.fulfilled,
+                studentsThunks.createStudentThunk.fulfilled,
                 (state, action) => {
                     state.students.push(
                         action.payload
@@ -82,7 +101,8 @@ const studentsSlice = createSlice({
 export const {
     setStudents,
     addStudent,
-    deleteStudent
+    deleteStudent,
+    updateStudent,
 } = studentsSlice.actions;
 
 export default studentsSlice.reducer;
